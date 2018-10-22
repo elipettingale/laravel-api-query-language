@@ -1,6 +1,6 @@
 <?php
 
-namespace EliPett\ApiQueryLanguage;
+namespace EliPett\ApiQueryLanguage\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
