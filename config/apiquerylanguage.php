@@ -4,7 +4,7 @@ return [
 
     'api_prefix' => 'api',
 
-    'mutators' => [
+    'mutations' => [
 
     ]
 
