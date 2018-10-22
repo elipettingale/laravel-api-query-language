@@ -19,6 +19,8 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapApiRoutes()
     {
-        Route::group(__DIR__ . '/../Routes/api.php');
+        Route::namespace('EliPett\ApiQueryLanguage\Controllers')
+            ->prefix(config('apiquerylanguage.api_prefix', 'api'))
+            ->group(__DIR__ . '/../Routes/api.php');
     }
 }
