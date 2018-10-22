@@ -2,6 +2,10 @@
 
 return [
 
-    'api_prefix' => 'api'
+    'api_prefix' => 'api',
+
+    'mutators' => [
+
+    ]
 
 ];
