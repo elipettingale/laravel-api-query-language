@@ -39,9 +39,19 @@ class QueryController extends Controller
     {
         try {
 
+            if ($results = $this->getCachedResults()) {
+                return new JsonResponse([
+                    'success' => true,
+                    'results' => $results
+                ]);
+            }
+
+            $results = $this->query();
+            $this->cacheResults($results);
+
             return new JsonResponse([
                 'success' => true,
-                'results' => $this->query()
+                'results' => $results
             ]);
 
         } catch (\Exception $exception) {
