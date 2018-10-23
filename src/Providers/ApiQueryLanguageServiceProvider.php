@@ -26,7 +26,7 @@ class ApiQueryLanguageServiceProvider extends ServiceProvider
     private function publishAssets()
     {
         $this->publishes([
-            __DIR__ . '/../config/apiquerylanguage.php' => config_path('apiquerylanguage.php'),
+            __DIR__ . '/../../config/apiquerylanguage.php' => config_path('apiquerylanguage.php'),
         ], 'config');
     }
 }
