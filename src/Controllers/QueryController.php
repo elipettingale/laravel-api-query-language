@@ -3,7 +3,6 @@
 namespace EliPett\ApiQueryLanguage\Controllers;
 
 use EliPett\ApiQueryLanguage\Services\ApiQueryLanguage;
-use EliPett\ApiQueryLanguage\Services\Mutate;
 use EliPett\ApiQueryLanguage\Traits\RunsMutations;
 use EliPett\EntityTransformer\Services\Transform;
 use Illuminate\Auth\Access\AuthorizationException;
