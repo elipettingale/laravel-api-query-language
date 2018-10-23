@@ -4,6 +4,7 @@ namespace EliPett\ApiQueryLanguage\Controllers;
 
 use EliPett\ApiQueryLanguage\Services\ApiQueryLanguage;
 use EliPett\ApiQueryLanguage\Services\Mutate;
+use EliPett\ApiQueryLanguage\Traits\RunsMutations;
 use EliPett\EntityTransformer\Services\Transform;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -12,6 +13,8 @@ use Illuminate\Routing\Controller;
 
 class QueryController extends Controller
 {
+    use RunsMutations;
+
     private $apiQueryLanguage;
 
     private $entityPath;
@@ -67,12 +70,8 @@ class QueryController extends Controller
             throw new AuthorizationException("You do not have permission to query this entity");
         }
 
-        /** @var \Illuminate\Database\Eloquent\Builder $query */
         $query = $this->entityPath::query();
-
-        foreach ($this->mutations as $mutationPath) {
-            Mutate::query($query, $mutationPath);
-        }
+        $query = $this->runMutations($this->mutations, $query);
 
         return Transform::entities($query->get(), $entityDefinition->getTransformerPath());
     }

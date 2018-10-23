@@ -3,11 +3,13 @@
 namespace EliPett\ApiQueryLanguage\Mutations;
 
 use EliPett\ApiQueryLanguage\Contracts\Mutation;
-use EliPett\ApiQueryLanguage\Services\Mutate;
+use EliPett\ApiQueryLanguage\Traits\RunsMutations;
 use Illuminate\Database\Eloquent\Builder;
 
 class WhereHasMutation implements Mutation
 {
+    use RunsMutations;
+
     private $relation;
     private $mutations;
 
@@ -20,9 +22,7 @@ class WhereHasMutation implements Mutation
     public function mutate(Builder $query): Builder
     {
         return $query->whereHas($this->relation, function(Builder $query) {
-            foreach ($this->mutations as $mutation) {
-                Mutate::query($query, $mutation);
-            }
+            $this->runMutations($this->mutations, $query);
         });
     }
 }
