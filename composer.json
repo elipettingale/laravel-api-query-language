@@ -1,6 +1,6 @@
 {
   "name": "elipettingale/laravel-api-query-language",
-  "description": "A query language for querying models via an api.",
+  "description": "A query language for querying eloquent models via an api.",
   "type": "library",
   "require": {
     "laravel/framework": "^5.4|^5.5|^5.6",
