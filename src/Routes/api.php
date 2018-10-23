@@ -6,5 +6,5 @@ use Illuminate\Routing\Router;
 $router = app('router');
 
 $router->post('query', [
-    'uses' => 'ApiQueryController@handle'
+    'uses' => 'QueryController@handle'
 ]);

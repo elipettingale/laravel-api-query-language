@@ -13,9 +13,9 @@ class ApiQueryLanguage
         $this->entities = collect();
     }
 
-    public function register(EntityDefinition $entityDefinition): void
+    public function register(array $data): void
     {
-        $this->entities->push($entityDefinition);
+        $this->entities->push(new EntityDefinition($data));
     }
 
     public function find(string $entityPath): ?EntityDefinition

@@ -9,11 +9,11 @@ class EntityDefinition
     private $transformerPath;
     private $permissionCallback;
 
-    public function __construct($entityPath, $transformerPath, $permissionCallback)
+    public function __construct(array $data)
     {
-        $this->entityPath = $entityPath;
-        $this->transformerPath = $transformerPath;
-        $this->permissionCallback = $permissionCallback;
+        $this->entityPath = array_get($data, 'entity_path');
+        $this->transformerPath = array_get($data, 'transformer_path');
+        $this->permissionCallback = array_get($data, 'permission_callback');
     }
 
     public function getTransformerPath(): string
