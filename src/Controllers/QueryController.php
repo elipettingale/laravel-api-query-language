@@ -27,10 +27,12 @@ class QueryController extends Controller
         $this->entityPath = $request->get('entity');
         $this->mutations = $request->get('mutations', []);
 
+        $cache = $request->get('cache');
+
         $this->cache = [
             'key' => $this->generateCacheKey($request->all()),
-            'duration' => $request->get('cache.duration'),
-            'tags' => $request->get('cache.tags')
+            'duration' => array_get($cache, 'duration'),
+            'tags' => array_get($cache, 'tags', [])
         ];
     }
 
@@ -107,6 +109,10 @@ class QueryController extends Controller
                     return $results;
                 });
 
+            return;
+        }
+
+        if ($this->cache['duration'] === 0) {
             return;
         }
 
