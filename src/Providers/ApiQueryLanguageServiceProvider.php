@@ -2,6 +2,7 @@
 
 namespace EliPett\ApiQueryLanguage\Providers;
 
+use EliPett\ApiQueryLanguage\Services\ApiQueryLanguage;
 use Illuminate\Support\ServiceProvider;
 
 class ApiQueryLanguageServiceProvider extends ServiceProvider
@@ -10,6 +11,11 @@ class ApiQueryLanguageServiceProvider extends ServiceProvider
     {
         $this->loadTranslations();
         $this->publishAssets();
+    }
+
+    public function register()
+    {
+        $this->app->singleton(ApiQueryLanguage::class);
     }
 
     private function loadTranslations()

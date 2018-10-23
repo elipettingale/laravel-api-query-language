@@ -2,20 +2,27 @@
 
 namespace EliPett\ApiQueryLanguage\Controllers;
 
+use EliPett\ApiQueryLanguage\Services\ApiQueryLanguage;
+use EliPett\ApiQueryLanguage\Services\Mutate;
+use EliPett\EntityTransformer\Services\Transform;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class QueryController extends Controller
 {
-    private $entity;
-    private $mutations;
+    private $apiQueryLanguage;
 
+    private $entityPath;
+    private $mutations;
     private $cache;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, ApiQueryLanguage $apiQueryLanguage)
     {
-        $this->entity = $request->get('entity');
+        $this->apiQueryLanguage = $apiQueryLanguage;
+
+        $this->entityPath = $request->get('entity');
         $this->mutations = $request->get('mutations', []);
 
         $this->cache = [
@@ -29,37 +36,45 @@ class QueryController extends Controller
     {
         try {
 
-            if ($results = $this->query()) {
-                return new JsonResponse([
-                    'success' => true,
-                    'results' => $results
-                ]);
-            }
-
             return new JsonResponse([
                 'success' => true,
-                'message' => 'No results were found.'
+                'results' => $this->query()
             ]);
 
         } catch (\Exception $exception) {
             return new JsonResponse([
-                'success' => true,
+                'success' => false,
                 'message' => $exception->getMessage()
             ]);
         }
     }
 
-    public function query(): bool
+    /**
+     * @return array
+     * @throws \Illuminate\Auth\Access\AuthorizationException | \InvalidArgumentException
+     */
+    public function query(): array
     {
-        if (!class_exists($this->entity)) {
-            throw new \InvalidArgumentException("Entity class ({$this->entity}) does not exist.");
+        if (!class_exists($this->entityPath)) {
+            throw new \InvalidArgumentException("Entity class ({$this->entityPath}) does not exist.");
         }
 
-        $query = $this->entity::query();
+        if (!$entityDefinition = $this->apiQueryLanguage->find($this->entityPath)) {
+            throw new \InvalidArgumentException("Entity ({$this->entityPath}) is not registered.");
+        }
 
-        // todo: run mutations
-        // todo: run transformers (may need to create a transformer path factory class that can be overwritten)
-        // todo: cache results
+        if (!$entityDefinition->authorize()) {
+            throw new AuthorizationException("You do not have permission to query this entity");
+        }
+
+        /** @var \Illuminate\Database\Eloquent\Builder $query */
+        $query = $this->entityPath::query();
+
+        foreach ($this->mutations as $mutationPath) {
+            Mutate::query($query, $mutationPath);
+        }
+
+        return Transform::entities($query->get(), $entityDefinition->getTransformerPath());
     }
 
     /** @throws \Exception */
