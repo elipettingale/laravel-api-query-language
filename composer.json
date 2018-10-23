@@ -23,7 +23,8 @@
   "extra": {
     "laravel": {
       "providers": [
-        "EliPett\\ApiQueryLanguage\\ApiQueryLanguageServiceProvider"
+        "EliPett\\ApiQueryLanguage\\Providers\\ApiQueryLanguageServiceProvider",
+        "EliPett\\ApiQueryLanguage\\Providers\\RouteServiceProvider"
       ]
     }
   }
