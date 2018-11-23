@@ -2,7 +2,7 @@
 
 return [
 
-    'api_prefix' => 'api',
+    'api_url' => 'api/query',
 
     'mutations' => [
         'WhereHas' => \EliPett\ApiQueryLanguage\Mutations\WhereHasMutation::class,

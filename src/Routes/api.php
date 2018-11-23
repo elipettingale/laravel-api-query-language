@@ -5,6 +5,6 @@ use Illuminate\Routing\Router;
 /** @var Router $router */
 $router = app('router');
 
-$router->post('query', [
+$router->post('/', [
     'uses' => 'QueryController@handle'
 ]);
